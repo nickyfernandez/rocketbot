@@ -11,26 +11,28 @@ use App\User;
 class PostController extends Controller
 {
   public function createPost(Request $req){
+
     $nuevoPost = new Post();
     $nuevoPost->post = $req["post"];
     $nuevoPost->id_user = Auth::user();
     $nuevoPost->save();
-    return redirect("/");
+    return view('home');
   }
 
   public function createComment(Request $req, $id){
+
     $nuevoComment = new Comment();
     $nuevoComment->comment = $req["comment"];
     $nuevoComment->id_post = $id;
     $nuevoComment->save();
-    return redirect("/");
+    return view('home');
   }
 
   public function seePost($id){
         $id_post = $id;
         $postElegido = Post::Search($id_post->id)->first();
         $postComments = $postElegido->comments()->get();
-      return view('/')->with('postElegido', $postElegido)->with('postComments', $postComments);
+      return view('detalle')->with('postElegido', $postElegido)->with('postComments', $postComments);
   }
 
   public function seeAllPosts(){
@@ -39,8 +41,9 @@ class PostController extends Controller
         $id_post = $post->id;
         $postElegido = Post::Search($id_post->id)->first();
         $postComments = $postElegido->comments()->get();
+        
       }
-      return view('/')->with('todosPosts', $todosPosts)->with('postComments', $postComments);
+      return view('todos')->with('todosPosts', $todosPosts)->with('postComments', $postComments);
   }
 
 
@@ -54,7 +57,7 @@ class PostController extends Controller
         $postElegido = Post::Search($id_post->id)->first();
         $postComments = $postElegido->comments()->get();
       }
-      return view('/')->with('postsDelUsuario', $postsDelUsuario)->with('postComments', $postComments);
+      return view('todo')->with('postsDelUsuario', $postsDelUsuario)->with('postComments', $postComments);
   }
 
   public function seeMyComments(){
@@ -68,7 +71,7 @@ class PostController extends Controller
         $commentElegido = Comment::Search($id_post->id)->first();
         $postComments = $commentElegido->post()->get();
       }
-      return view('/')->with('commentsDelUsuario', $commentsDelUsuario)->with('postComments', $postComments);
+      return view('comentarios')->with('commentsDelUsuario', $commentsDelUsuario)->with('postComments', $postComments);
   }
 
 
